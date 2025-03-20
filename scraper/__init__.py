@@ -13,9 +13,9 @@ When using these tools, ensure you comply with the target website's robots.txt
 and terms of service.
 """
 
-from leadgen_tool.scraper.web_scraper import scrape_website, WebScraper
-from leadgen_tool.scraper.google_search import search_companies, GoogleSearcher
-from leadgen_tool.scraper.linkedin_scraper import search_linkedin_companies, get_linkedin_company_details, LinkedInScraper
+from scraper.web_scraper import scrape_website, WebScraper
+from scraper.google_search import search_companies, GoogleSearcher
+from scraper.linkedin_scraper import search_linkedin_companies, get_linkedin_company_details, LinkedInScraper
 
 __all__ = [
     'scrape_website',

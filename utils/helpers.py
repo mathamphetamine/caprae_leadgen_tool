@@ -8,7 +8,7 @@ from urllib.parse import urlparse, urljoin
 from datetime import datetime
 import logging
 
-from leadgen_tool.utils.config import (
+from utils.config import (
     EMAIL_PATTERN, PHONE_PATTERN, COMPANY_NAME_PATTERN,
     DEFAULT_EXPORT_PATH
 )

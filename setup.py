@@ -15,7 +15,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/mathamphetamine/caprae_leadgen_tool",
-    packages=find_packages(),
+    packages=find_packages(include=['scraper', 'enricher', 'utils']),
+    py_modules=['main', 'run'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -25,7 +26,7 @@ setup(
     install_requires=requirements,
     include_package_data=True,
     package_data={
-        'caprae_leadgen_tool': [
+        '': [
             'templates/*',
             'static/css/*',
             'static/js/*',
@@ -34,7 +35,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'caprae-leadgen=main:app.run',
+            'caprae-leadgen=run:main',
         ],
     },
 ) 

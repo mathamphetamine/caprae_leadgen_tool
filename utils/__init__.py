@@ -10,7 +10,7 @@ These modules are used throughout the application to provide common
 functionality and maintain consistent configuration.
 """
 
-from leadgen_tool.utils.helpers import (
+from utils.helpers import (
     extract_emails, extract_phones, clean_text, is_valid_url,
     normalize_url, rate_limit, export_to_csv, export_to_excel,
     extract_domain_from_url, extract_company_name

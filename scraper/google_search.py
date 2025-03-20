@@ -5,8 +5,8 @@ import time
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from leadgen_tool.utils.config import GOOGLE_API_KEY, GOOGLE_CSE_ID, REQUEST_HEADERS, REQUEST_TIMEOUT
-from leadgen_tool.utils.helpers import rate_limit, extract_domain_from_url
+from utils.config import GOOGLE_API_KEY, GOOGLE_CSE_ID, REQUEST_HEADERS, REQUEST_TIMEOUT
+from utils.helpers import rate_limit, extract_domain_from_url
 
 logger = logging.getLogger(__name__)
 

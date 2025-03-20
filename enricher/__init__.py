@@ -10,8 +10,8 @@ These modules help improve lead quality by validating email deliverability
 and adding additional context to basic company information.
 """
 
-from leadgen_tool.enricher.email_validator import validate_email_single, validate_email_list, filter_valid_emails, EmailValidator
-from leadgen_tool.enricher.data_enricher import enrich_company_data, batch_enrich_companies, enrich_dataframe, DataEnricher
+from enricher.email_validator import validate_email_single, validate_email_list, filter_valid_emails, EmailValidator
+from enricher.data_enricher import enrich_company_data, batch_enrich_companies, enrich_dataframe, DataEnricher
 
 __all__ = [
     'validate_email_single',

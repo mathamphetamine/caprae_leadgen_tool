@@ -4,8 +4,8 @@ import logging
 import dns.resolver
 from email_validator import validate_email, EmailNotValidError
 
-from leadgen_tool.utils.config import EMAIL_CHECK_TIMEOUT
-from leadgen_tool.utils.helpers import rate_limit
+from utils.config import EMAIL_CHECK_TIMEOUT
+from utils.helpers import rate_limit
 
 logger = logging.getLogger(__name__)
 

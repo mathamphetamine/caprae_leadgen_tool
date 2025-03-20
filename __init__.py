@@ -16,11 +16,11 @@ __version__ = '0.1.0'
 __author__ = 'Caprae Capital Partners'
 
 # Import key components for easier access
-from leadgen_tool.scraper.web_scraper import scrape_website
-from leadgen_tool.scraper.google_search import search_companies
-from leadgen_tool.scraper.linkedin_scraper import search_linkedin_companies, get_linkedin_company_details
-from leadgen_tool.enricher.email_validator import validate_email_single, validate_email_list, filter_valid_emails
-from leadgen_tool.enricher.data_enricher import enrich_company_data, batch_enrich_companies, enrich_dataframe
+from scraper.web_scraper import scrape_website
+from scraper.google_search import search_companies
+from scraper.linkedin_scraper import search_linkedin_companies, get_linkedin_company_details
+from enricher.email_validator import validate_email_single, validate_email_list, filter_valid_emails
+from enricher.data_enricher import enrich_company_data, batch_enrich_companies, enrich_dataframe
 
 # Define what's available through direct imports
 __all__ = [

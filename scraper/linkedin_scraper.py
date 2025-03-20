@@ -10,8 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 
-from leadgen_tool.utils.config import REQUEST_HEADERS, LINKEDIN_LOGIN_REQUIRED
-from leadgen_tool.utils.helpers import rate_limit
+from utils.config import REQUEST_HEADERS, LINKEDIN_LOGIN_REQUIRED
+from utils.helpers import rate_limit
 
 logger = logging.getLogger(__name__)
 

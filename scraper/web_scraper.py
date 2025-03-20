@@ -5,8 +5,8 @@ import time
 import re
 from urllib.parse import urljoin, urlparse
 
-from leadgen_tool.utils.config import REQUEST_HEADERS, REQUEST_TIMEOUT
-from leadgen_tool.utils.helpers import (
+from utils.config import REQUEST_HEADERS, REQUEST_TIMEOUT
+from utils.helpers import (
     extract_emails, extract_phones, clean_text, 
     is_valid_url, normalize_url, rate_limit,
     extract_company_name, extract_domain_from_url

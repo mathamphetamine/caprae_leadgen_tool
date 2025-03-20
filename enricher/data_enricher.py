@@ -2,9 +2,9 @@ import re
 import logging
 import pandas as pd
 
-from leadgen_tool.utils.helpers import extract_domain_from_url
-from leadgen_tool.scraper.web_scraper import scrape_website
-from leadgen_tool.enricher.email_validator import filter_valid_emails
+from utils.helpers import extract_domain_from_url
+from scraper.web_scraper import scrape_website
+from enricher.email_validator import filter_valid_emails
 
 logger = logging.getLogger(__name__)
 
