@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadGen Tool - Find and Validate Business Leads</title>
+    <meta name="description" content="LeadGen Tool helps businesses find, validate, and enrich contact information for sales and marketing leads.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <style>
+        .card {
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #0d6efd;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .hero {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            background-color: #f8f9fa;
+            display: none;
+        }
+        .spinner-container {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">LeadGen Tool</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#search" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Find companies based on search criteria">
+                            <i class="fas fa-search me-1"></i> Search
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#scrape" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Extract contact data from websites">
+                            <i class="fas fa-spider me-1"></i> Scrape
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#enrich" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Add valuable information to your leads">
+                            <i class="fas fa-database me-1"></i> Enrich
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#validate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Verify email addresses">
+                            <i class="fas fa-check-circle me-1"></i> Validate
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#batch" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Process multiple leads at once">
+                            <i class="fas fa-file-upload me-1"></i> Batch
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold">Generate Quality Leads With AI</h1>
+                    <p class="lead">Search, scrape, validate, and enrich contact data seamlessly with our powerful lead generation tool</p>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="https://via.placeholder.com/600x300?text=LeadGen+Tool" alt="LeadGen Tool" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="main-container">
+        <!-- Features Overview -->
+        <div class="row mb-5">
+            <div class="col-md-3">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <i class="fas fa-search feature-icon"></i>
+                        <h5 class="card-title">Search Companies</h5>
+                        <p class="card-text">Find relevant companies based on your search criteria</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <i class="fas fa-spider feature-icon"></i>
+                        <h5 class="card-title">Scrape Websites</h5>
+                        <p class="card-text">Extract contact information from company websites</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <i class="fas fa-check-circle feature-icon"></i>
+                        <h5 class="card-title">Validate Emails</h5>
+                        <p class="card-text">Verify email addresses to ensure deliverability</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <i class="fas fa-database feature-icon"></i>
+                        <h5 class="card-title">Enrich Data</h5>
+                        <p class="card-text">Add valuable insights to your contact data</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="search-tab" data-bs-toggle="tab" data-bs-target="#search-tab-pane" type="button" role="tab" aria-controls="search-tab-pane" aria-selected="true">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="scrape-tab" data-bs-toggle="tab" data-bs-target="#scrape-tab-pane" type="button" role="tab" aria-controls="scrape-tab-pane" aria-selected="false">
+                    <i class="fas fa-spider me-2"></i>Scrape
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="validate-tab" data-bs-toggle="tab" data-bs-target="#validate-tab-pane" type="button" role="tab" aria-controls="validate-tab-pane" aria-selected="false">
+                    <i class="fas fa-check-circle me-2"></i>Validate
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="enrich-tab" data-bs-toggle="tab" data-bs-target="#enrich-tab-pane" type="button" role="tab" aria-controls="enrich-tab-pane" aria-selected="false">
+                    <i class="fas fa-database me-2"></i>Enrich
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="batch-tab" data-bs-toggle="tab" data-bs-target="#batch-tab-pane" type="button" role="tab" aria-controls="batch-tab-pane" aria-selected="false">
+                    <i class="fas fa-file-upload me-2"></i>Batch Process
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <!-- Search Tab -->
+            <div class="tab-pane fade show active" id="search-tab-pane" role="tabpanel" aria-labelledby="search-tab" tabindex="0">
+                <div class="card p-4">
+                    <h2 class="mb-4">Search Companies</h2>
+                    <form id="search-form" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="search-query" class="form-label">Search Query</label>
+                            <input type="text" class="form-control" id="search-query" placeholder="e.g. software development companies in berlin" required>
+                            <div class="invalid-feedback">Please enter a search query.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="search-results" class="form-label">Number of Results</label>
+                            <input type="number" class="form-control" id="search-results" value="10" min="1" max="50" required>
+                            <div class="invalid-feedback">Please enter a number between 1 and 50.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="search-domains" class="form-label">Filter by Domains (optional)</label>
+                            <input type="text" class="form-control" id="search-domains" placeholder="e.g. .com, .de, .io">
+                            <div class="form-text">Comma-separated list of domain extensions to filter results.</div>
+                        </div>
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search me-1"></i> Search
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-clear-form" data-form-id="search-form">
+                                <i class="fas fa-eraser me-1"></i> Clear
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="spinner-container" id="search-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Searching for companies...</p>
+                    </div>
+
+                    <div class="result-container" id="search-results-container">
+                        <h3 class="mb-3">Search Results</h3>
+                        <div id="search-results-list"></div>
+                        <div class="mt-3">
+                            <button id="enrich-search-results" class="btn btn-success me-2">
+                                <i class="fas fa-database me-1"></i> Enrich Selected Results
+                            </button>
+                            <button id="export-search-results" class="btn btn-secondary">
+                                <i class="fas fa-download me-1"></i> Export Results
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrape Tab -->
+            <div class="tab-pane fade" id="scrape-tab-pane" role="tabpanel" aria-labelledby="scrape-tab" tabindex="0">
+                <div class="card p-4">
+                    <h2 class="mb-4">Scrape Website</h2>
+                    <form id="scrape-form" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="scrape-url" class="form-label">Website URL</label>
+                            <input type="url" class="form-control" id="scrape-url" placeholder="https://example.com" required>
+                            <div class="invalid-feedback">Please enter a valid URL.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="scrape-pages" class="form-label">Max Pages to Scrape</label>
+                            <input type="number" class="form-control" id="scrape-pages" value="5" min="1" max="20" required>
+                            <div class="invalid-feedback">Please enter a number between 1 and 20.</div>
+                            <div class="form-text">Higher values will take longer but may find more information.</div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="scrape-follow-links" checked>
+                            <label class="form-check-label" for="scrape-follow-links">Follow Links</label>
+                            <div class="form-text">Enable to follow internal links like contact and about pages.</div>
+                        </div>
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-spider me-1"></i> Scrape
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-clear-form" data-form-id="scrape-form">
+                                <i class="fas fa-eraser me-1"></i> Clear
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="spinner-container" id="scrape-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Scraping website...</p>
+                    </div>
+
+                    <div class="result-container" id="scrape-results-container">
+                        <h3 class="mb-3">Scrape Results</h3>
+                        <div id="scrape-results"></div>
+                        <button id="export-scrape-results" class="btn btn-secondary mt-3">
+                            <i class="fas fa-download me-1"></i> Export Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Validate Tab -->
+            <div class="tab-pane fade" id="validate-tab-pane" role="tabpanel" aria-labelledby="validate-tab" tabindex="0">
+                <div class="card p-4">
+                    <h2 class="mb-4">Validate Emails</h2>
+                    <form id="validate-form" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="validate-emails" class="form-label">Emails to Validate</label>
+                            <textarea class="form-control" id="validate-emails" rows="5" placeholder="One email per line, e.g.&#10;contact@example.com&#10;info@example.com" required></textarea>
+                            <div class="invalid-feedback">Please enter at least one email address.</div>
+                        </div>
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-check-circle me-1"></i> Validate
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-clear-form" data-form-id="validate-form">
+                                <i class="fas fa-eraser me-1"></i> Clear
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="spinner-container" id="validate-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Validating emails...</p>
+                    </div>
+
+                    <div class="result-container" id="validate-results-container">
+                        <h3 class="mb-3">Validation Results</h3>
+                        <div id="validate-results"></div>
+                        <button id="export-validate-results" class="btn btn-secondary mt-3">
+                            <i class="fas fa-download me-1"></i> Export Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enrich Tab -->
+            <div class="tab-pane fade" id="enrich-tab-pane" role="tabpanel" aria-labelledby="enrich-tab" tabindex="0">
+                <div class="card p-4">
+                    <h2 class="mb-4">Enrich Company Data</h2>
+                    <form id="enrich-form" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="enrich-url" class="form-label">Website URL</label>
+                            <input type="url" class="form-control" id="enrich-url" placeholder="https://example.com">
+                            <div class="form-text">Either Website URL or Domain is required.</div>
+                            <div class="invalid-feedback">Please enter a valid URL.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="enrich-domain" class="form-label">Domain</label>
+                            <input type="text" class="form-control" id="enrich-domain" placeholder="example.com">
+                            <div class="form-text">If left empty, domain will be extracted from URL.</div>
+                        </div>
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-database me-1"></i> Enrich
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-clear-form" data-form-id="enrich-form">
+                                <i class="fas fa-eraser me-1"></i> Clear
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="spinner-container" id="enrich-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Enriching data...</p>
+                    </div>
+
+                    <div class="result-container" id="enrich-results-container">
+                        <h3 class="mb-3">Enrichment Results</h3>
+                        <div id="enrich-results"></div>
+                        <button id="export-enrich-results" class="btn btn-secondary mt-3">
+                            <i class="fas fa-download me-1"></i> Export Results
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Batch Process Tab -->
+            <div class="tab-pane fade" id="batch-tab-pane" role="tabpanel" aria-labelledby="batch-tab" tabindex="0">
+                <div class="card p-4">
+                    <h2 class="mb-4">Batch Process</h2>
+                    <p>Upload a CSV or Excel file with company data to enrich in bulk.</p>
+                    <form id="batch-form" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="batch-file" class="form-label">File (CSV or Excel)</label>
+                            <input type="file" class="form-control" id="batch-file" accept=".csv, .xlsx, .xls" required>
+                            <div class="invalid-feedback">Please select a file to upload.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="batch-website-col" class="form-label">Website Column Name</label>
+                            <input type="text" class="form-control" id="batch-website-col" value="website" required>
+                            <div class="invalid-feedback">Please enter the column name for website URLs.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="batch-name-col" class="form-label">Company Name Column (optional)</label>
+                            <input type="text" class="form-control" id="batch-name-col" placeholder="company_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="batch-domain-col" class="form-label">Domain Column (optional)</label>
+                            <input type="text" class="form-control" id="batch-domain-col" placeholder="domain">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Export Format</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="export-format" id="export-csv" value="csv" checked>
+                                <label class="form-check-label" for="export-csv">CSV</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="export-format" id="export-excel" value="excel">
+                                <label class="form-check-label" for="export-excel">Excel</label>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-cogs me-1"></i> Process File
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-clear-form" data-form-id="batch-form">
+                                <i class="fas fa-eraser me-1"></i> Clear
+                            </button>
+                        </div>
+                        
+                        <div class="mt-3 alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Need a sample file?</strong> 
+                            <a href="{{ url_for('static', filename='sample_data.csv') }}" download="sample_data.csv">Download sample CSV</a>
+                        </div>
+                    </form>
+
+                    <div class="spinner-container" id="batch-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Processing file...</p>
+                    </div>
+
+                    <div class="result-container" id="batch-results-container">
+                        <h3 class="mb-3">Batch Processing Results</h3>
+                        <div id="batch-results"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-2">LeadGen Tool &copy; 2023. For educational purposes only.</p>
+            <p class="small text-muted mb-0">
+                This tool is designed to help businesses find and verify leads ethically. 
+                Always ensure you comply with relevant data protection regulations.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <!-- Form handling and API calls -->
+    <script>
+        // Custom form validation
+        (function() {
+            // Validate the enrich form (needs special handling)
+            document.getElementById('enrich-form').addEventListener('submit', function(event) {
+                const urlInput = document.getElementById('enrich-url');
+                const domainInput = document.getElementById('enrich-domain');
+                
+                // At least one of URL or domain must be filled
+                if (!urlInput.value && !domainInput.value) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    urlInput.setCustomValidity('Please enter either a website URL or domain.');
+                    urlInput.reportValidity();
+                    return false;
+                } else {
+                    urlInput.setCustomValidity('');
+                }
+            });
+        })();
+    
+        // Utility function to show spinner and hide results
+        function showSpinner(spinnerId, resultsContainerId) {
+            document.getElementById(spinnerId).style.display = 'block';
+            document.getElementById(resultsContainerId).style.display = 'none';
+        }
+
+        // Utility function to hide spinner and show results
+        function showResults(spinnerId, resultsContainerId) {
+            document.getElementById(spinnerId).style.display = 'none';
+            document.getElementById(resultsContainerId).style.display = 'block';
+        }
+
+        // Utility function to render JSON as HTML
+        function renderJson(json, containerId) {
+            const container = document.getElementById(containerId);
+            
+            // If it's an array, render as a table
+            if (Array.isArray(json)) {
+                if (json.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info">No results found.</div>';
+                    return;
+                }
+                
+                // Create table
+                let tableHtml = '<div class="table-responsive"><table class="table table-striped">';
+                
+                // Get headers from first object keys
+                const headers = Object.keys(json[0]);
+                tableHtml += '<thead><tr>';
+                if (containerId === 'search-results-list') {
+                    tableHtml += '<th class="no-sort"><input type="checkbox" id="select-all"></th>';
+                }
+                headers.forEach(header => {
+                    tableHtml += `<th>${header}</th>`;
+                });
+                tableHtml += '</tr></thead><tbody>';
+                
+                // Add rows
+                json.forEach((item, index) => {
+                    tableHtml += '<tr>';
+                    if (containerId === 'search-results-list') {
+                        tableHtml += `<td><input type="checkbox" class="result-checkbox" data-index="${index}"></td>`;
+                    }
+                    headers.forEach(header => {
+                        let value = item[header];
+                        // Handle arrays specially
+                        if (Array.isArray(value)) {
+                            value = value.join(', ');
+                        }
+                        // Handle links specially
+                        if (header.includes('url') && value && value.startsWith('http')) {
+                            tableHtml += `<td><a href="${value}" target="_blank" rel="noopener noreferrer">${value}</a></td>`;
+                        } else {
+                            tableHtml += `<td>${value || ''}</td>`;
+                        }
+                    });
+                    tableHtml += '</tr>';
+                });
+                
+                tableHtml += '</tbody></table></div>';
+                container.innerHTML = tableHtml;
+                
+                // Add event listener for select all checkbox if it exists
+                const selectAll = document.getElementById('select-all');
+                if (selectAll) {
+                    selectAll.addEventListener('change', function() {
+                        document.querySelectorAll('.result-checkbox').forEach(checkbox => {
+                            checkbox.checked = selectAll.checked;
+                        });
+                    });
+                }
+            } else {
+                // If it's not an array, render as a definition list
+                let dlHtml = '<dl class="row">';
+                for (const [key, value] of Object.entries(json)) {
+                    dlHtml += `<dt class="col-sm-3">${key}</dt>`;
+                    if (Array.isArray(value)) {
+                        dlHtml += `<dd class="col-sm-9">${value.join(', ')}</dd>`;
+                    } else if (key.includes('url') && value && value.toString().startsWith('http')) {
+                        dlHtml += `<dd class="col-sm-9"><a href="${value}" target="_blank" rel="noopener noreferrer">${value}</a></dd>`;
+                    } else {
+                        dlHtml += `<dd class="col-sm-9">${value || ''}</dd>`;
+                    }
+                }
+                dlHtml += '</dl>';
+                container.innerHTML = dlHtml;
+            }
+        }
+
+        // Search form submission
+        document.getElementById('search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            const query = document.getElementById('search-query').value;
+            const numResults = document.getElementById('search-results').value;
+            const domainsStr = document.getElementById('search-domains').value;
+            
+            const filterDomains = domainsStr ? domainsStr.split(',').map(d => d.trim()) : null;
+            
+            showSpinner('search-spinner', 'search-results-container');
+            
+            fetch('/api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query: query,
+                    num_results: numResults,
+                    filter_domains: filterDomains
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderJson(data, 'search-results-list');
+                showResults('search-spinner', 'search-results-container');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('search-results-list').innerHTML = 
+                    `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                showResults('search-spinner', 'search-results-container');
+            });
+        });
+
+        // Scrape form submission
+        document.getElementById('scrape-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            const url = document.getElementById('scrape-url').value;
+            const maxPages = document.getElementById('scrape-pages').value;
+            const followLinks = document.getElementById('scrape-follow-links').checked;
+            
+            showSpinner('scrape-spinner', 'scrape-results-container');
+            
+            fetch('/api/scrape', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: url,
+                    max_pages: maxPages,
+                    follow_links: followLinks
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderJson(data, 'scrape-results');
+                showResults('scrape-spinner', 'scrape-results-container');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('scrape-results').innerHTML = 
+                    `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                showResults('scrape-spinner', 'scrape-results-container');
+            });
+        });
+
+        // Validate form submission
+        document.getElementById('validate-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            const emailsText = document.getElementById('validate-emails').value;
+            const emails = emailsText.split('\n').map(e => e.trim()).filter(e => e);
+            
+            if (emails.length === 0) {
+                alert('Please enter at least one email to validate.');
+                return;
+            }
+            
+            showSpinner('validate-spinner', 'validate-results-container');
+            
+            fetch('/api/validate-emails', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    emails: emails
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderJson(data, 'validate-results');
+                showResults('validate-spinner', 'validate-results-container');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('validate-results').innerHTML = 
+                    `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                showResults('validate-spinner', 'validate-results-container');
+            });
+        });
+
+        // Enrich form submission
+        document.getElementById('enrich-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            const url = document.getElementById('enrich-url').value;
+            const domain = document.getElementById('enrich-domain').value;
+            
+            if (!url && !domain) {
+                alert('Please enter either a website URL or domain.');
+                return;
+            }
+            
+            showSpinner('enrich-spinner', 'enrich-results-container');
+            
+            fetch('/api/enrich', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    website_url: url,
+                    domain: domain
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderJson(data, 'enrich-results');
+                showResults('enrich-spinner', 'enrich-results-container');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('enrich-results').innerHTML = 
+                    `<div class="alert alert-danger">Error: ${error.message}</div>`;
+                showResults('enrich-spinner', 'enrich-results-container');
+            });
+        });
+
+        // Batch form submission
+        document.getElementById('batch-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            const fileInput = document.getElementById('batch-file');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const websiteCol = document.getElementById('batch-website-col').value;
+            const nameCol = document.getElementById('batch-name-col').value;
+            const domainCol = document.getElementById('batch-domain-col').value;
+            const exportFormat = document.querySelector('input[name="export-format"]:checked').value;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('website_column', websiteCol);
+            if (nameCol) formData.append('name_column', nameCol);
+            if (domainCol) formData.append('domain_column', domainCol);
+            formData.append('export_format', exportFormat);
+            
+            showSpinner('batch-spinner', 'batch-results-container');
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('batch-results').innerHTML = `
+                        <div class="alert alert-success">
+                            <p><i class="fas fa-check-circle me-2"></i> ${data.message}</p>
+                            <p>Processed ${data.row_count} rows.</p>
+                            <a href="${data.export_path}" class="btn btn-primary" download>
+                                <i class="fas fa-download me-1"></i> Download Results
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('batch-results').innerHTML = `
+                        <div class="alert alert-danger">
+                            <p><i class="fas fa-exclamation-triangle me-2"></i> Error: ${data.error}</p>
+                        </div>
+                    `;
+                }
+                showResults('batch-spinner', 'batch-results-container');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('batch-results').innerHTML = 
+                    `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i> Error: ${error.message}</div>`;
+                showResults('batch-spinner', 'batch-results-container');
+            });
+        });
+
+        // Export search results
+        document.getElementById('export-search-results').addEventListener('click', function() {
+            const searchResults = document.querySelectorAll('.result-checkbox:checked');
+            if (searchResults.length === 0) {
+                alert('Please select at least one result to export.');
+                return;
+            }
+            
+            // Get the selected results
+            const results = Array.from(searchResults).map(checkbox => {
+                const index = parseInt(checkbox.dataset.index);
+                const row = checkbox.closest('tr');
+                
+                // Extract the data from the row
+                const data = {};
+                row.querySelectorAll('td:not(:first-child)').forEach((cell, i) => {
+                    const header = document.querySelector(`#search-results-list thead th:nth-child(${i+2})`).textContent;
+                    data[header] = cell.textContent;
+                });
+                
+                return data;
+            });
+            
+            // Create a CSV from the results
+            const headers = Object.keys(results[0]);
+            let csv = headers.join(',') + '\n';
+            
+            results.forEach(result => {
+                const row = headers.map(header => {
+                    // Escape any commas in the content
+                    return `"${result[header].replace(/"/g, '""')}"`;
+                }).join(',');
+                csv += row + '\n';
+            });
+            
+            // Create a download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'search_results.csv');
+            a.click();
+        });
+
+        // Export scrape results
+        document.getElementById('export-scrape-results').addEventListener('click', function() {
+            // Get the data
+            const resultsDiv = document.getElementById('scrape-results');
+            const keys = Array.from(resultsDiv.querySelectorAll('dt')).map(dt => dt.textContent);
+            const values = Array.from(resultsDiv.querySelectorAll('dd')).map(dd => dd.textContent);
+            
+            // Create a CSV
+            let csv = keys.join(',') + '\n';
+            csv += values.map(v => `"${v.replace(/"/g, '""')}"`).join(',') + '\n';
+            
+            // Create a download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'scrape_results.csv');
+            a.click();
+        });
+
+        // Export validate results
+        document.getElementById('export-validate-results').addEventListener('click', function() {
+            // Get the data
+            const table = document.querySelector('#validate-results table');
+            if (!table) {
+                alert('No results to export.');
+                return;
+            }
+            
+            // Get headers
+            const headers = Array.from(table.querySelectorAll('th')).map(th => th.textContent);
+            let csv = headers.join(',') + '\n';
+            
+            // Get rows
+            Array.from(table.querySelectorAll('tbody tr')).forEach(row => {
+                const values = Array.from(row.querySelectorAll('td')).map(td => `"${td.textContent.replace(/"/g, '""')}"`);
+                csv += values.join(',') + '\n';
+            });
+            
+            // Create a download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'validation_results.csv');
+            a.click();
+        });
+
+        // Export enrich results
+        document.getElementById('export-enrich-results').addEventListener('click', function() {
+            // Get the data
+            const resultsDiv = document.getElementById('enrich-results');
+            const keys = Array.from(resultsDiv.querySelectorAll('dt')).map(dt => dt.textContent);
+            const values = Array.from(resultsDiv.querySelectorAll('dd')).map(dd => dd.textContent);
+            
+            // Create a CSV
+            let csv = keys.join(',') + '\n';
+            csv += values.map(v => `"${v.replace(/"/g, '""')}"`).join(',') + '\n';
+            
+            // Create a download link
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'enrichment_results.csv');
+            a.click();
+        });
+
+        // Enrich selected results
+        document.getElementById('enrich-search-results').addEventListener('click', function() {
+            const searchResults = document.querySelectorAll('.result-checkbox:checked');
+            if (searchResults.length === 0) {
+                alert('Please select at least one result to enrich.');
+                return;
+            }
+            
+            // Get the selected results
+            const companies = Array.from(searchResults).map(checkbox => {
+                const index = parseInt(checkbox.dataset.index);
+                const row = checkbox.closest('tr');
+                
+                // Extract the data from the row
+                const data = {};
+                row.querySelectorAll('td:not(:first-child)').forEach((cell, i) => {
+                    const header = document.querySelector(`#search-results-list thead th:nth-child(${i+2})`).textContent;
+                    data[header] = cell.textContent;
+                });
+                
+                return data;
+            });
+            
+            // Show enrichment in progress
+            document.getElementById('search-results-list').innerHTML = 
+                `<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i> Enriching ${companies.length} ${companies.length === 1 ? 'company' : 'companies'}... This may take a while.</div>`;
+            
+            // Enrich the companies
+            fetch('/api/batch-enrich', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    companies: companies
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderJson(data, 'search-results-list');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('search-results-list').innerHTML = 
+                    `<div class="alert alert-danger"><i class="fas fa-exclamation-triangle me-2"></i> Error: ${error.message}</div>`;
+            });
+        });
+    </script>
+</body>
+</html> 

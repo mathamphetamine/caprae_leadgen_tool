@@ -1,0 +1,124 @@
+/**
+ * LeadGen Tool - Custom CSS Styles
+ * 
+ * This file contains additional styling beyond Bootstrap to create
+ * a unique and more polished user interface.
+ */
+
+/* General styling improvements */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Hero section styling */
+.hero {
+    background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.hero h1 {
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Card styling enhancements */
+.card {
+    margin-bottom: 1.5rem;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+/* Feature icon styling */
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.25rem;
+    color: #0d6efd;
+    transition: all 0.3s ease;
+}
+
+.card:hover .feature-icon {
+    transform: scale(1.1);
+}
+
+/* Navbar styling */
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+}
+
+/* Results container styling */
+.result-container {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    display: none;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Spinner styling */
+.spinner-container {
+    display: none;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+/* Table improvements */
+.table {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #f5f7fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+}
+
+/* Form control focus states */
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Button hover improvements */
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Tab styling */
+.nav-tabs .nav-link {
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+}
+
+.nav-tabs .nav-link.active {
+    border-bottom: 2px solid #0d6efd;
+    color: #0d6efd;
+}
+
+/* Footer styling */
+footer {
+    margin-top: 4rem;
+    padding: 2rem 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+} 
