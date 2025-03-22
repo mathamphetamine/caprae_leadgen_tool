@@ -1,17 +1,10 @@
 # Lead Generation Tool
 
-A web scraping tool designed for lead generation, helping businesses identify and collect potential customer information from various online sources.
+An AI-enhanced web scraping tool designed for lead generation, helping businesses identify and collect potential customer information from company websites efficiently.
 
-## Features
+![Lead Gen Tool](https://via.placeholder.com/800x400?text=Lead+Generation+Tool)
 
-- **Targeted Website Scraping**: Extract potential lead data from specified websites with support for multi-page crawling
-- **Intelligent Filtering**: Filter and prioritize leads based on keywords, criteria, and advanced field-specific filters
-- **Data Validation & Cleaning**: Ensure data quality with validation, deduplication, and text normalization
-- **Lead Analysis**: View statistics and insights about your leads, including industry and domain breakdowns
-- **User-friendly Interface**: Intuitive Streamlit web interface with configuration management
-- **Ethical Scraping**: Built-in respect for robots.txt rules and rate limiting
-
-## Setup Instructions
+## Quick Start
 
 1. Clone this repository
 2. Install dependencies:
@@ -20,49 +13,57 @@ A web scraping tool designed for lead generation, helping businesses identify an
    ```
 3. Run the application:
    ```
-   cd lead_gen_tool
    streamlit run src/app.py
    ```
 
-## Usage
+## Key Features
 
-1. Enter the target website URL
-2. Configure crawling options (depth, robots.txt settings)
-3. Specify filtering criteria (keywords, industry, etc.)
-4. Click "Generate Leads"
-5. Search, filter, and analyze your leads
-6. Download the results as a CSV file
+- **Targeted Website Scraping**: Extract lead data from websites with multi-page crawling
+- **Intelligent Filtering**: Find relevant leads with customizable criteria
+- **Data Validation**: Ensure quality with automated cleaning and validation
+- **Lead Analysis**: Get insights into your leads with visual analytics
+- **Ethical Scraping**: Built-in respect for robots.txt and rate limiting
 
-## Advanced Features
+## Documentation
 
-### Website Crawling
-The tool can automatically follow internal links on a website to discover more potential leads. Configure the maximum number of pages to crawl in the settings.
+For comprehensive documentation, please refer to:
 
-### Configuration Management
-Save your favorite search configurations and load them later to quickly run the same searches again.
+- [Complete Documentation](DOCUMENTATION.md) - Detailed user guide and technical information
+- [Video Script](VIDEO_SCRIPT.md) - Script for creating a demonstration video
 
-### Advanced Filtering
-Apply field-specific filters using contains/not contains conditions to precisely target the leads you want.
+## Project Structure
 
-### Real-time Search
-Search within your results to quickly find specific leads matching your criteria.
+```
+├── config/              # Configuration storage
+├── data/                # Lead data exports
+├── src/                 # Source code
+│   ├── app.py           # Streamlit UI
+│   ├── scraper.py       # Lead scraping engine
+│   └── tests/           # Unit tests
+├── DOCUMENTATION.md     # Complete user and developer guide
+├── README.md            # This file
+├── requirements.txt     # Python dependencies
+└── VIDEO_SCRIPT.md      # Video demonstration script
+```
 
-## Design Choices
+## Development
 
-- **Quality Over Quantity**: Focused on creating a small set of well-implemented features
-- **User Experience**: Prioritized an intuitive interface for non-technical users
-- **Data Quality**: Implemented validation and filtering to ensure high-quality leads
-- **Ethical Scraping**: Respects website terms of service and includes rate limiting
-- **Resilient Design**: Robust error handling and recovery mechanisms
-
-## Dependencies
+### Dependencies
 
 - Python 3.8+
 - See requirements.txt for full list of packages
 
-## Testing
+### Testing
 
 Run the unit tests with:
 ```
-python -m unittest tests/test_scraper.py
+python -m unittest src/tests/test_scraper.py
 ```
+
+## License
+
+MIT
+
+## Disclaimer
+
+This tool is for educational purposes only. Always ensure you comply with websites' terms of service and robots.txt files when scraping. Be respectful of rate limits and privacy concerns.
